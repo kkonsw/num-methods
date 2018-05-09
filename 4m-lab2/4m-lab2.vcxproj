@@ -151,11 +151,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ErrorsMain.cpp" />
-    <ClCompile Include="ErrorsTest.cpp" />
     <ClCompile Include="MainForm.cpp" />
-    <ClCompile Include="TableMainVS2.cpp" />
-    <ClCompile Include="TableTestU.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ErrorsMain.h">

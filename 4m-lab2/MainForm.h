@@ -16,10 +16,15 @@ namespace My4mlab2 {
     protected:
         double **u;         // точные значени€ в узлах сетки
         double **v;         // посчитанные значени€ в узлах сетки
-        double **f;         // f(x,y) - права€ часть
+        double **f1;         // f(x,y) - права€ часть
         double **test_err;  // разности численного и точного решени€ в узлах сетки
-        double a, b, c, d;  // границы области
 
+        double **vs1;       // численное решение с разбиением s1
+        double **vs2;       // численное решение с разбиением s2
+        double **f2;
+        double **main_diff; // разности решений s1 и s2
+
+        double a, b, c, d;  // границы области
         int test_n, test_m; // число разбиений
         int main_n, main_m;
 
@@ -28,7 +33,13 @@ namespace My4mlab2 {
         int test_Nmax;      // макс. число шагов
         int main_Nmax;
         double test_eps;    // макс. погрешность        
-        double main_eps;
+    private: System::Windows::Forms::TextBox^  textBox_main_stepsS2;
+    private: System::Windows::Forms::Label^  label_main_stepsS2;
+    protected:
+
+    protected:
+
+             double main_eps;
 
         // выделение пам€ти под матрицы
         template <typename T>
@@ -71,8 +82,13 @@ namespace My4mlab2 {
 
             u = nullptr;
             v = nullptr;
-            f = nullptr;
+            f1 = nullptr;
             test_err = nullptr;
+
+            double **vs1 = nullptr;
+            double **vs2 = nullptr;
+            double **f2 = nullptr;
+            double **main_diff = nullptr;
 
 			InitializeComponent();
 			//
@@ -90,10 +106,19 @@ namespace My4mlab2 {
                 deleteMatrix<double>(u);
             if (v != nullptr)
                 deleteMatrix<double>(v);
-            if (f != nullptr)
-                deleteMatrix<double>(f);
+            if (f1 != nullptr)
+                deleteMatrix<double>(f1);
             if (test_err != nullptr)
                 deleteMatrix<double>(test_err);
+
+            if (vs1 != nullptr)
+                deleteMatrix<double>(vs1);
+            if (vs2 != nullptr)
+                deleteMatrix<double>(vs2);
+            if (f2 != nullptr)
+                deleteMatrix<double>(f2);
+            if (main_diff != nullptr)
+                deleteMatrix<double>(main_diff);
 
 			if (components)
 			{
@@ -101,6 +126,18 @@ namespace My4mlab2 {
 			}
 		}
 
+    private: System::Windows::Forms::Label^  label_mainEps;
+    private: System::Windows::Forms::Label^  label_mainNmax;
+private: System::Windows::Forms::TextBox^  textBox_main_stepsS1;
+
+    private: System::Windows::Forms::TextBox^  textBox_mainMaxDiff;
+private: System::Windows::Forms::Label^  label_main_stepsS1;
+
+    private: System::Windows::Forms::Label^  label_mainMaxDiff;
+    private: System::Windows::Forms::TextBox^  textBox_main_w;
+    private: System::Windows::Forms::TextBox^  textBox_mainEps;
+    private: System::Windows::Forms::TextBox^  textBox_mainNmax;
+    private: System::Windows::Forms::Label^  label_main_w;
     private: System::Windows::Forms::TextBox^  textBox_test_steps;
     private: System::Windows::Forms::TextBox^  textBox_test_MaxErr;
     private: System::Windows::Forms::Label^  label_test_steps;
@@ -154,7 +191,13 @@ namespace My4mlab2 {
             this->button_testU = (gcnew System::Windows::Forms::Button());
             this->dataGridView_testV = (gcnew System::Windows::Forms::DataGridView());
             this->groupBox_testResults = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox_test_steps = (gcnew System::Windows::Forms::TextBox());
+            this->textBox_test_MaxErr = (gcnew System::Windows::Forms::TextBox());
+            this->label_test_steps = (gcnew System::Windows::Forms::Label());
+            this->label_testMaxErr = (gcnew System::Windows::Forms::Label());
             this->groupBox_testSettings = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox_test_w = (gcnew System::Windows::Forms::TextBox());
+            this->label_test_w = (gcnew System::Windows::Forms::Label());
             this->textBox_testEps = (gcnew System::Windows::Forms::TextBox());
             this->textBox_testNmax = (gcnew System::Windows::Forms::TextBox());
             this->label_testEps = (gcnew System::Windows::Forms::Label());
@@ -169,18 +212,24 @@ namespace My4mlab2 {
             this->button_mainVS2 = (gcnew System::Windows::Forms::Button());
             this->dataGridView_mainVS1 = (gcnew System::Windows::Forms::DataGridView());
             this->groupBox_mainResults = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox_main_stepsS1 = (gcnew System::Windows::Forms::TextBox());
+            this->textBox_mainMaxDiff = (gcnew System::Windows::Forms::TextBox());
+            this->label_main_stepsS1 = (gcnew System::Windows::Forms::Label());
+            this->label_mainMaxDiff = (gcnew System::Windows::Forms::Label());
             this->groupBox_mainSettings = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox_main_w = (gcnew System::Windows::Forms::TextBox());
+            this->textBox_mainEps = (gcnew System::Windows::Forms::TextBox());
+            this->textBox_mainNmax = (gcnew System::Windows::Forms::TextBox());
+            this->label_main_w = (gcnew System::Windows::Forms::Label());
+            this->label_mainEps = (gcnew System::Windows::Forms::Label());
+            this->label_mainNmax = (gcnew System::Windows::Forms::Label());
             this->button_mainSolve = (gcnew System::Windows::Forms::Button());
             this->textBox_main_m = (gcnew System::Windows::Forms::TextBox());
             this->textBox_main_n = (gcnew System::Windows::Forms::TextBox());
             this->label_main_m = (gcnew System::Windows::Forms::Label());
             this->label_main_n = (gcnew System::Windows::Forms::Label());
-            this->label_test_w = (gcnew System::Windows::Forms::Label());
-            this->textBox_test_w = (gcnew System::Windows::Forms::TextBox());
-            this->label_testMaxErr = (gcnew System::Windows::Forms::Label());
-            this->label_test_steps = (gcnew System::Windows::Forms::Label());
-            this->textBox_test_MaxErr = (gcnew System::Windows::Forms::TextBox());
-            this->textBox_test_steps = (gcnew System::Windows::Forms::TextBox());
+            this->label_main_stepsS2 = (gcnew System::Windows::Forms::Label());
+            this->textBox_main_stepsS2 = (gcnew System::Windows::Forms::TextBox());
             this->tabControl->SuspendLayout();
             this->tabPage_test->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_testV))->BeginInit();
@@ -188,6 +237,7 @@ namespace My4mlab2 {
             this->groupBox_testSettings->SuspendLayout();
             this->tabPage_main->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_mainVS1))->BeginInit();
+            this->groupBox_mainResults->SuspendLayout();
             this->groupBox_mainSettings->SuspendLayout();
             this->SuspendLayout();
             // 
@@ -232,7 +282,7 @@ namespace My4mlab2 {
             this->button_testU->BackColor = System::Drawing::Color::WhiteSmoke;
             this->button_testU->Location = System::Drawing::Point(374, 636);
             this->button_testU->Name = L"button_testU";
-            this->button_testU->Size = System::Drawing::Size(362, 40);
+            this->button_testU->Size = System::Drawing::Size(355, 40);
             this->button_testU->TabIndex = 3;
             this->button_testU->Text = L"“аблица с точными значени€ми";
             this->button_testU->UseVisualStyleBackColor = false;
@@ -261,6 +311,38 @@ namespace My4mlab2 {
             this->groupBox_testResults->TabStop = false;
             this->groupBox_testResults->Text = L"–езультаты";
             // 
+            // textBox_test_steps
+            // 
+            this->textBox_test_steps->Location = System::Drawing::Point(106, 90);
+            this->textBox_test_steps->Name = L"textBox_test_steps";
+            this->textBox_test_steps->Size = System::Drawing::Size(100, 26);
+            this->textBox_test_steps->TabIndex = 3;
+            // 
+            // textBox_test_MaxErr
+            // 
+            this->textBox_test_MaxErr->Location = System::Drawing::Point(106, 55);
+            this->textBox_test_MaxErr->Name = L"textBox_test_MaxErr";
+            this->textBox_test_MaxErr->Size = System::Drawing::Size(100, 26);
+            this->textBox_test_MaxErr->TabIndex = 2;
+            // 
+            // label_test_steps
+            // 
+            this->label_test_steps->AutoSize = true;
+            this->label_test_steps->Location = System::Drawing::Point(35, 93);
+            this->label_test_steps->Name = L"label_test_steps";
+            this->label_test_steps->Size = System::Drawing::Size(65, 20);
+            this->label_test_steps->TabIndex = 1;
+            this->label_test_steps->Text = L"steps = ";
+            // 
+            // label_testMaxErr
+            // 
+            this->label_testMaxErr->AutoSize = true;
+            this->label_testMaxErr->Location = System::Drawing::Point(24, 58);
+            this->label_testMaxErr->Name = L"label_testMaxErr";
+            this->label_testMaxErr->Size = System::Drawing::Size(76, 20);
+            this->label_testMaxErr->TabIndex = 0;
+            this->label_testMaxErr->Text = L"maxErr = ";
+            // 
             // groupBox_testSettings
             // 
             this->groupBox_testSettings->Controls->Add(this->textBox_test_w);
@@ -280,6 +362,23 @@ namespace My4mlab2 {
             this->groupBox_testSettings->TabIndex = 0;
             this->groupBox_testSettings->TabStop = false;
             this->groupBox_testSettings->Text = L"ѕараметры";
+            // 
+            // textBox_test_w
+            // 
+            this->textBox_test_w->Location = System::Drawing::Point(106, 180);
+            this->textBox_test_w->Name = L"textBox_test_w";
+            this->textBox_test_w->Size = System::Drawing::Size(100, 26);
+            this->textBox_test_w->TabIndex = 10;
+            this->textBox_test_w->Text = L"1,6";
+            // 
+            // label_test_w
+            // 
+            this->label_test_w->AutoSize = true;
+            this->label_test_w->Location = System::Drawing::Point(63, 183);
+            this->label_test_w->Name = L"label_test_w";
+            this->label_test_w->Size = System::Drawing::Size(37, 20);
+            this->label_test_w->TabIndex = 9;
+            this->label_test_w->Text = L"w = ";
             // 
             // textBox_testEps
             // 
@@ -378,20 +477,20 @@ namespace My4mlab2 {
             // button_mainErrors
             // 
             this->button_mainErrors->BackColor = System::Drawing::Color::WhiteSmoke;
-            this->button_mainErrors->Location = System::Drawing::Point(758, 627);
+            this->button_mainErrors->Location = System::Drawing::Point(759, 636);
             this->button_mainErrors->Name = L"button_mainErrors";
-            this->button_mainErrors->Size = System::Drawing::Size(346, 43);
+            this->button_mainErrors->Size = System::Drawing::Size(339, 40);
             this->button_mainErrors->TabIndex = 4;
-            this->button_mainErrors->Text = L"“аблица погрешностей";
+            this->button_mainErrors->Text = L"“аблица разностей";
             this->button_mainErrors->UseVisualStyleBackColor = false;
             this->button_mainErrors->Click += gcnew System::EventHandler(this, &MainForm::button_mainErrors_Click);
             // 
             // button_mainVS2
             // 
             this->button_mainVS2->BackColor = System::Drawing::Color::WhiteSmoke;
-            this->button_mainVS2->Location = System::Drawing::Point(382, 627);
+            this->button_mainVS2->Location = System::Drawing::Point(374, 636);
             this->button_mainVS2->Name = L"button_mainVS2";
-            this->button_mainVS2->Size = System::Drawing::Size(370, 43);
+            this->button_mainVS2->Size = System::Drawing::Size(355, 40);
             this->button_mainVS2->TabIndex = 3;
             this->button_mainVS2->Text = L"“аблица с более точным решением";
             this->button_mainVS2->UseVisualStyleBackColor = false;
@@ -401,14 +500,20 @@ namespace My4mlab2 {
             // 
             this->dataGridView_mainVS1->BackgroundColor = System::Drawing::SystemColors::Control;
             this->dataGridView_mainVS1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-            this->dataGridView_mainVS1->Location = System::Drawing::Point(382, 56);
+            this->dataGridView_mainVS1->Location = System::Drawing::Point(374, 67);
             this->dataGridView_mainVS1->Name = L"dataGridView_mainVS1";
             this->dataGridView_mainVS1->RowTemplate->Height = 28;
-            this->dataGridView_mainVS1->Size = System::Drawing::Size(722, 547);
+            this->dataGridView_mainVS1->Size = System::Drawing::Size(724, 545);
             this->dataGridView_mainVS1->TabIndex = 2;
             // 
             // groupBox_mainResults
             // 
+            this->groupBox_mainResults->Controls->Add(this->textBox_main_stepsS2);
+            this->groupBox_mainResults->Controls->Add(this->label_main_stepsS2);
+            this->groupBox_mainResults->Controls->Add(this->textBox_main_stepsS1);
+            this->groupBox_mainResults->Controls->Add(this->textBox_mainMaxDiff);
+            this->groupBox_mainResults->Controls->Add(this->label_main_stepsS1);
+            this->groupBox_mainResults->Controls->Add(this->label_mainMaxDiff);
             this->groupBox_mainResults->Location = System::Drawing::Point(48, 346);
             this->groupBox_mainResults->Name = L"groupBox_mainResults";
             this->groupBox_mainResults->Size = System::Drawing::Size(264, 257);
@@ -416,26 +521,115 @@ namespace My4mlab2 {
             this->groupBox_mainResults->TabStop = false;
             this->groupBox_mainResults->Text = L"–езультаты";
             // 
+            // textBox_main_stepsS1
+            // 
+            this->textBox_main_stepsS1->Location = System::Drawing::Point(106, 90);
+            this->textBox_main_stepsS1->Name = L"textBox_main_stepsS1";
+            this->textBox_main_stepsS1->Size = System::Drawing::Size(100, 26);
+            this->textBox_main_stepsS1->TabIndex = 4;
+            // 
+            // textBox_mainMaxDiff
+            // 
+            this->textBox_mainMaxDiff->Location = System::Drawing::Point(106, 55);
+            this->textBox_mainMaxDiff->Name = L"textBox_mainMaxDiff";
+            this->textBox_mainMaxDiff->Size = System::Drawing::Size(100, 26);
+            this->textBox_mainMaxDiff->TabIndex = 3;
+            // 
+            // label_main_stepsS1
+            // 
+            this->label_main_stepsS1->AutoSize = true;
+            this->label_main_stepsS1->Location = System::Drawing::Point(18, 93);
+            this->label_main_stepsS1->Name = L"label_main_stepsS1";
+            this->label_main_stepsS1->Size = System::Drawing::Size(86, 20);
+            this->label_main_stepsS1->TabIndex = 2;
+            this->label_main_stepsS1->Text = L"steps s1 = ";
+            // 
+            // label_mainMaxDiff
+            // 
+            this->label_mainMaxDiff->AutoSize = true;
+            this->label_mainMaxDiff->Location = System::Drawing::Point(24, 58);
+            this->label_mainMaxDiff->Name = L"label_mainMaxDiff";
+            this->label_mainMaxDiff->Size = System::Drawing::Size(80, 20);
+            this->label_mainMaxDiff->TabIndex = 1;
+            this->label_mainMaxDiff->Text = L"maxDiff = ";
+            // 
             // groupBox_mainSettings
             // 
+            this->groupBox_mainSettings->Controls->Add(this->textBox_main_w);
+            this->groupBox_mainSettings->Controls->Add(this->textBox_mainEps);
+            this->groupBox_mainSettings->Controls->Add(this->textBox_mainNmax);
+            this->groupBox_mainSettings->Controls->Add(this->label_main_w);
+            this->groupBox_mainSettings->Controls->Add(this->label_mainEps);
+            this->groupBox_mainSettings->Controls->Add(this->label_mainNmax);
             this->groupBox_mainSettings->Controls->Add(this->button_mainSolve);
             this->groupBox_mainSettings->Controls->Add(this->textBox_main_m);
             this->groupBox_mainSettings->Controls->Add(this->textBox_main_n);
             this->groupBox_mainSettings->Controls->Add(this->label_main_m);
             this->groupBox_mainSettings->Controls->Add(this->label_main_n);
-            this->groupBox_mainSettings->Location = System::Drawing::Point(48, 47);
+            this->groupBox_mainSettings->Location = System::Drawing::Point(48, 59);
             this->groupBox_mainSettings->Name = L"groupBox_mainSettings";
-            this->groupBox_mainSettings->Size = System::Drawing::Size(264, 266);
+            this->groupBox_mainSettings->Size = System::Drawing::Size(267, 281);
             this->groupBox_mainSettings->TabIndex = 0;
             this->groupBox_mainSettings->TabStop = false;
             this->groupBox_mainSettings->Text = L"ѕараметры";
             // 
+            // textBox_main_w
+            // 
+            this->textBox_main_w->Location = System::Drawing::Point(106, 180);
+            this->textBox_main_w->Name = L"textBox_main_w";
+            this->textBox_main_w->Size = System::Drawing::Size(100, 26);
+            this->textBox_main_w->TabIndex = 13;
+            this->textBox_main_w->Text = L"1,6";
+            // 
+            // textBox_mainEps
+            // 
+            this->textBox_mainEps->Location = System::Drawing::Point(106, 148);
+            this->textBox_mainEps->Name = L"textBox_mainEps";
+            this->textBox_mainEps->Size = System::Drawing::Size(100, 26);
+            this->textBox_mainEps->TabIndex = 12;
+            this->textBox_mainEps->Text = L"1e-6";
+            // 
+            // textBox_mainNmax
+            // 
+            this->textBox_mainNmax->Location = System::Drawing::Point(106, 116);
+            this->textBox_mainNmax->Name = L"textBox_mainNmax";
+            this->textBox_mainNmax->Size = System::Drawing::Size(100, 26);
+            this->textBox_mainNmax->TabIndex = 11;
+            this->textBox_mainNmax->Text = L"1000";
+            // 
+            // label_main_w
+            // 
+            this->label_main_w->AutoSize = true;
+            this->label_main_w->Location = System::Drawing::Point(63, 183);
+            this->label_main_w->Name = L"label_main_w";
+            this->label_main_w->Size = System::Drawing::Size(37, 20);
+            this->label_main_w->TabIndex = 10;
+            this->label_main_w->Text = L"w = ";
+            // 
+            // label_mainEps
+            // 
+            this->label_mainEps->AutoSize = true;
+            this->label_mainEps->Location = System::Drawing::Point(48, 151);
+            this->label_mainEps->Name = L"label_mainEps";
+            this->label_mainEps->Size = System::Drawing::Size(52, 20);
+            this->label_mainEps->TabIndex = 7;
+            this->label_mainEps->Text = L"eps = ";
+            // 
+            // label_mainNmax
+            // 
+            this->label_mainNmax->AutoSize = true;
+            this->label_mainNmax->Location = System::Drawing::Point(27, 119);
+            this->label_mainNmax->Name = L"label_mainNmax";
+            this->label_mainNmax->Size = System::Drawing::Size(73, 20);
+            this->label_mainNmax->TabIndex = 6;
+            this->label_mainNmax->Text = L"n_max = ";
+            // 
             // button_mainSolve
             // 
             this->button_mainSolve->BackColor = System::Drawing::Color::WhiteSmoke;
-            this->button_mainSolve->Location = System::Drawing::Point(69, 198);
+            this->button_mainSolve->Location = System::Drawing::Point(69, 223);
             this->button_mainSolve->Name = L"button_mainSolve";
-            this->button_mainSolve->Size = System::Drawing::Size(137, 37);
+            this->button_mainSolve->Size = System::Drawing::Size(137, 40);
             this->button_mainSolve->TabIndex = 4;
             this->button_mainSolve->Text = L"–ешить";
             this->button_mainSolve->UseVisualStyleBackColor = false;
@@ -443,7 +637,7 @@ namespace My4mlab2 {
             // 
             // textBox_main_m
             // 
-            this->textBox_main_m->Location = System::Drawing::Point(106, 91);
+            this->textBox_main_m->Location = System::Drawing::Point(106, 84);
             this->textBox_main_m->Name = L"textBox_main_m";
             this->textBox_main_m->Size = System::Drawing::Size(100, 26);
             this->textBox_main_m->TabIndex = 3;
@@ -451,7 +645,7 @@ namespace My4mlab2 {
             // 
             // textBox_main_n
             // 
-            this->textBox_main_n->Location = System::Drawing::Point(106, 51);
+            this->textBox_main_n->Location = System::Drawing::Point(106, 52);
             this->textBox_main_n->Name = L"textBox_main_n";
             this->textBox_main_n->Size = System::Drawing::Size(100, 26);
             this->textBox_main_n->TabIndex = 2;
@@ -460,7 +654,7 @@ namespace My4mlab2 {
             // label_main_m
             // 
             this->label_main_m->AutoSize = true;
-            this->label_main_m->Location = System::Drawing::Point(65, 94);
+            this->label_main_m->Location = System::Drawing::Point(61, 87);
             this->label_main_m->Name = L"label_main_m";
             this->label_main_m->Size = System::Drawing::Size(39, 20);
             this->label_main_m->TabIndex = 1;
@@ -469,60 +663,27 @@ namespace My4mlab2 {
             // label_main_n
             // 
             this->label_main_n->AutoSize = true;
-            this->label_main_n->Location = System::Drawing::Point(65, 54);
+            this->label_main_n->Location = System::Drawing::Point(65, 55);
             this->label_main_n->Name = L"label_main_n";
             this->label_main_n->Size = System::Drawing::Size(35, 20);
             this->label_main_n->TabIndex = 0;
             this->label_main_n->Text = L"n = ";
             // 
-            // label_test_w
+            // label_main_stepsS2
             // 
-            this->label_test_w->AutoSize = true;
-            this->label_test_w->Location = System::Drawing::Point(63, 183);
-            this->label_test_w->Name = L"label_test_w";
-            this->label_test_w->Size = System::Drawing::Size(37, 20);
-            this->label_test_w->TabIndex = 9;
-            this->label_test_w->Text = L"w = ";
+            this->label_main_stepsS2->AutoSize = true;
+            this->label_main_stepsS2->Location = System::Drawing::Point(18, 128);
+            this->label_main_stepsS2->Name = L"label_main_stepsS2";
+            this->label_main_stepsS2->Size = System::Drawing::Size(86, 20);
+            this->label_main_stepsS2->TabIndex = 5;
+            this->label_main_stepsS2->Text = L"steps s2 = ";
             // 
-            // textBox_test_w
+            // textBox_main_stepsS2
             // 
-            this->textBox_test_w->Location = System::Drawing::Point(106, 180);
-            this->textBox_test_w->Name = L"textBox_test_w";
-            this->textBox_test_w->Size = System::Drawing::Size(100, 26);
-            this->textBox_test_w->TabIndex = 10;
-            this->textBox_test_w->Text = L"1,2";
-            // 
-            // label_testMaxErr
-            // 
-            this->label_testMaxErr->AutoSize = true;
-            this->label_testMaxErr->Location = System::Drawing::Point(24, 58);
-            this->label_testMaxErr->Name = L"label_testMaxErr";
-            this->label_testMaxErr->Size = System::Drawing::Size(76, 20);
-            this->label_testMaxErr->TabIndex = 0;
-            this->label_testMaxErr->Text = L"maxErr = ";
-            // 
-            // label_test_steps
-            // 
-            this->label_test_steps->AutoSize = true;
-            this->label_test_steps->Location = System::Drawing::Point(35, 93);
-            this->label_test_steps->Name = L"label_test_steps";
-            this->label_test_steps->Size = System::Drawing::Size(65, 20);
-            this->label_test_steps->TabIndex = 1;
-            this->label_test_steps->Text = L"steps = ";
-            // 
-            // textBox_test_MaxErr
-            // 
-            this->textBox_test_MaxErr->Location = System::Drawing::Point(106, 55);
-            this->textBox_test_MaxErr->Name = L"textBox_test_MaxErr";
-            this->textBox_test_MaxErr->Size = System::Drawing::Size(100, 26);
-            this->textBox_test_MaxErr->TabIndex = 2;
-            // 
-            // textBox_test_steps
-            // 
-            this->textBox_test_steps->Location = System::Drawing::Point(106, 90);
-            this->textBox_test_steps->Name = L"textBox_test_steps";
-            this->textBox_test_steps->Size = System::Drawing::Size(100, 26);
-            this->textBox_test_steps->TabIndex = 3;
+            this->textBox_main_stepsS2->Location = System::Drawing::Point(106, 125);
+            this->textBox_main_stepsS2->Name = L"textBox_main_stepsS2";
+            this->textBox_main_stepsS2->Size = System::Drawing::Size(100, 26);
+            this->textBox_main_stepsS2->TabIndex = 6;
             // 
             // MainForm
             // 
@@ -541,6 +702,8 @@ namespace My4mlab2 {
             this->groupBox_testSettings->PerformLayout();
             this->tabPage_main->ResumeLayout(false);
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_mainVS1))->EndInit();
+            this->groupBox_mainResults->ResumeLayout(false);
+            this->groupBox_mainResults->PerformLayout();
             this->groupBox_mainSettings->ResumeLayout(false);
             this->groupBox_mainSettings->PerformLayout();
             this->ResumeLayout(false);
@@ -556,7 +719,18 @@ namespace My4mlab2 {
 
     protected:
              double func_u(double x, double y);
-             double func_f(double x, double y);
+             double func_f1(double x, double y);
+             double func_f2(double x, double y);
              void test_Solve();
+             int main_Solve(double **vs, double **fs, int n, int m, int nmax);
+
+             // граничные услови€
+             double nu1(double y);
+             double nu2(double y);
+             double nu3(double x);
+             double nu4(double x);
+
+             // дл€ матрицы vs - задать нулевое начальное приближение и √”
+             void setVS(double **vs, int n, int m);
 };
 }

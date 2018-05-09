@@ -23,6 +23,33 @@ namespace My4mlab2 {
 			//
 		}
 
+        ErrorsMain(double **v, int n, int m)
+        {
+            InitializeComponent();
+
+            // строим таблицу
+            cli::array< DataGridViewTextBoxColumn^ >^ arr;
+            arr = gcnew cli::array< DataGridViewTextBoxColumn^ >(n + 1);
+
+            for (int i = 0; i < n + 1; i++)
+            {
+                arr[i] = gcnew DataGridViewTextBoxColumn();
+            }
+
+            dataGridView_mainErrors->Columns->AddRange(arr);
+
+            for (int j = m; j >= 0; j--)
+            {
+                dataGridView_mainErrors->Rows->Add();
+                for (int i = 0; i < n + 1; i++)
+                {
+                    dataGridView_mainErrors->Rows[m - j]->Cells[i]->Value = System::Convert::ToString(v[i][j]);
+                }
+            }
+
+            dataGridView_mainErrors->ClearSelection();
+        }
+
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -34,6 +61,7 @@ namespace My4mlab2 {
 				delete components;
 			}
 		}
+
     private: System::Windows::Forms::DataGridView^  dataGridView_mainErrors;
     protected:
 
