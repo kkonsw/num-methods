@@ -23,6 +23,33 @@ namespace My4mlab2 {
 			//
 		}
 
+        TableTestU(double **u, int n, int m)
+        {
+            InitializeComponent();
+
+            // строим таблицу
+            cli::array< DataGridViewTextBoxColumn^ >^ arr;
+            arr = gcnew cli::array< DataGridViewTextBoxColumn^ >(n + 1);
+
+            for (int i = 0; i < n + 1; i++)
+            {
+                arr[i] = gcnew DataGridViewTextBoxColumn();
+            }
+
+            dataGridView_testU->Columns->AddRange(arr);          
+
+            for (int j = m; j >= 0 ; j--)
+            {
+                dataGridView_testU->Rows->Add();
+                for (int i = 0; i < n + 1; i++)
+                {
+                    dataGridView_testU->Rows[m - j]->Cells[i]->Value = System::Convert::ToString(u[i][j]);
+                }
+            }
+
+            dataGridView_testU->ClearSelection();
+        }
+
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -60,6 +87,7 @@ namespace My4mlab2 {
             this->dataGridView_testU->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
             this->dataGridView_testU->Location = System::Drawing::Point(69, 47);
             this->dataGridView_testU->Name = L"dataGridView_testU";
+            this->dataGridView_testU->RowHeadersVisible = false;
             this->dataGridView_testU->RowTemplate->Height = 28;
             this->dataGridView_testU->Size = System::Drawing::Size(684, 537);
             this->dataGridView_testU->TabIndex = 0;
