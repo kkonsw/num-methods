@@ -1,4 +1,6 @@
 #pragma once
+#include "test_functions.h"
+#include "main_functions.h"
 
 namespace My4mlab2 {
 	using namespace System;
@@ -14,9 +16,10 @@ namespace My4mlab2 {
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
     protected:
+
         double **u;         // точные значения в узлах сетки
         double **v;         // посчитанные значения в узлах сетки
-        double **f1;         // f(x,y) - правая часть
+        double **f1;        // f(x,y) - правая часть
         double **test_err;  // разности численного и точного решения в узлах сетки
 
         double **vs1;       // численное решение с разбиением s1
@@ -32,14 +35,8 @@ namespace My4mlab2 {
         double main_w;           
         int test_Nmax;      // макс. число шагов
         int main_Nmax;
-        double test_eps;    // макс. погрешность        
-    private: System::Windows::Forms::TextBox^  textBox_main_stepsS2;
-    private: System::Windows::Forms::Label^  label_main_stepsS2;
-    protected:
-
-    protected:
-
-             double main_eps;
+        double test_eps;    // макс. погрешность 
+        double main_eps;
 
         // выделение памяти под матрицы
         template <typename T>
@@ -128,11 +125,9 @@ namespace My4mlab2 {
 
     private: System::Windows::Forms::Label^  label_mainEps;
     private: System::Windows::Forms::Label^  label_mainNmax;
-private: System::Windows::Forms::TextBox^  textBox_main_stepsS1;
-
+    private: System::Windows::Forms::TextBox^  textBox_main_stepsS1;
     private: System::Windows::Forms::TextBox^  textBox_mainMaxDiff;
-private: System::Windows::Forms::Label^  label_main_stepsS1;
-
+    private: System::Windows::Forms::Label^  label_main_stepsS1;
     private: System::Windows::Forms::Label^  label_mainMaxDiff;
     private: System::Windows::Forms::TextBox^  textBox_main_w;
     private: System::Windows::Forms::TextBox^  textBox_mainEps;
@@ -171,6 +166,14 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
     private: System::Windows::Forms::Button^  button_mainVS2;
     private: System::Windows::Forms::Button^  button_testSolve;
     private: System::Windows::Forms::Button^  button_mainSolve;
+    private: System::Windows::Forms::TextBox^  textBox_main_stepsS2;
+    private: System::Windows::Forms::Label^  label_main_stepsS2;
+    private: System::Windows::Forms::TextBox^  textBox_testResEps;
+    private: System::Windows::Forms::Label^  label_testResEps;
+    private: System::Windows::Forms::TextBox^  textBox_mainResEps2;
+    private: System::Windows::Forms::TextBox^  textBox_mainResEps1;
+    private: System::Windows::Forms::Label^  label_mainResEps2;
+    private: System::Windows::Forms::Label^  label_mainResEps1;
 
     private:
 		/// <summary>
@@ -191,6 +194,8 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             this->button_testU = (gcnew System::Windows::Forms::Button());
             this->dataGridView_testV = (gcnew System::Windows::Forms::DataGridView());
             this->groupBox_testResults = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox_testResEps = (gcnew System::Windows::Forms::TextBox());
+            this->label_testResEps = (gcnew System::Windows::Forms::Label());
             this->textBox_test_steps = (gcnew System::Windows::Forms::TextBox());
             this->textBox_test_MaxErr = (gcnew System::Windows::Forms::TextBox());
             this->label_test_steps = (gcnew System::Windows::Forms::Label());
@@ -212,6 +217,12 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             this->button_mainVS2 = (gcnew System::Windows::Forms::Button());
             this->dataGridView_mainVS1 = (gcnew System::Windows::Forms::DataGridView());
             this->groupBox_mainResults = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox_mainResEps2 = (gcnew System::Windows::Forms::TextBox());
+            this->textBox_mainResEps1 = (gcnew System::Windows::Forms::TextBox());
+            this->label_mainResEps2 = (gcnew System::Windows::Forms::Label());
+            this->label_mainResEps1 = (gcnew System::Windows::Forms::Label());
+            this->textBox_main_stepsS2 = (gcnew System::Windows::Forms::TextBox());
+            this->label_main_stepsS2 = (gcnew System::Windows::Forms::Label());
             this->textBox_main_stepsS1 = (gcnew System::Windows::Forms::TextBox());
             this->textBox_mainMaxDiff = (gcnew System::Windows::Forms::TextBox());
             this->label_main_stepsS1 = (gcnew System::Windows::Forms::Label());
@@ -228,8 +239,6 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             this->textBox_main_n = (gcnew System::Windows::Forms::TextBox());
             this->label_main_m = (gcnew System::Windows::Forms::Label());
             this->label_main_n = (gcnew System::Windows::Forms::Label());
-            this->label_main_stepsS2 = (gcnew System::Windows::Forms::Label());
-            this->textBox_main_stepsS2 = (gcnew System::Windows::Forms::TextBox());
             this->tabControl->SuspendLayout();
             this->tabPage_test->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_testV))->BeginInit();
@@ -300,6 +309,8 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             // 
             // groupBox_testResults
             // 
+            this->groupBox_testResults->Controls->Add(this->textBox_testResEps);
+            this->groupBox_testResults->Controls->Add(this->label_testResEps);
             this->groupBox_testResults->Controls->Add(this->textBox_test_steps);
             this->groupBox_testResults->Controls->Add(this->textBox_test_MaxErr);
             this->groupBox_testResults->Controls->Add(this->label_test_steps);
@@ -310,6 +321,22 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             this->groupBox_testResults->TabIndex = 1;
             this->groupBox_testResults->TabStop = false;
             this->groupBox_testResults->Text = L"Результаты";
+            // 
+            // textBox_testResEps
+            // 
+            this->textBox_testResEps->Location = System::Drawing::Point(106, 127);
+            this->textBox_testResEps->Name = L"textBox_testResEps";
+            this->textBox_testResEps->Size = System::Drawing::Size(100, 26);
+            this->textBox_testResEps->TabIndex = 5;
+            // 
+            // label_testResEps
+            // 
+            this->label_testResEps->AutoSize = true;
+            this->label_testResEps->Location = System::Drawing::Point(24, 127);
+            this->label_testResEps->Name = L"label_testResEps";
+            this->label_testResEps->Size = System::Drawing::Size(76, 20);
+            this->label_testResEps->TabIndex = 4;
+            this->label_testResEps->Text = L"resEps = ";
             // 
             // textBox_test_steps
             // 
@@ -508,6 +535,10 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             // 
             // groupBox_mainResults
             // 
+            this->groupBox_mainResults->Controls->Add(this->textBox_mainResEps2);
+            this->groupBox_mainResults->Controls->Add(this->textBox_mainResEps1);
+            this->groupBox_mainResults->Controls->Add(this->label_mainResEps2);
+            this->groupBox_mainResults->Controls->Add(this->label_mainResEps1);
             this->groupBox_mainResults->Controls->Add(this->textBox_main_stepsS2);
             this->groupBox_mainResults->Controls->Add(this->label_main_stepsS2);
             this->groupBox_mainResults->Controls->Add(this->textBox_main_stepsS1);
@@ -520,6 +551,54 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             this->groupBox_mainResults->TabIndex = 1;
             this->groupBox_mainResults->TabStop = false;
             this->groupBox_mainResults->Text = L"Результаты";
+            // 
+            // textBox_mainResEps2
+            // 
+            this->textBox_mainResEps2->Location = System::Drawing::Point(106, 189);
+            this->textBox_mainResEps2->Name = L"textBox_mainResEps2";
+            this->textBox_mainResEps2->Size = System::Drawing::Size(100, 26);
+            this->textBox_mainResEps2->TabIndex = 10;
+            // 
+            // textBox_mainResEps1
+            // 
+            this->textBox_mainResEps1->Location = System::Drawing::Point(106, 157);
+            this->textBox_mainResEps1->Name = L"textBox_mainResEps1";
+            this->textBox_mainResEps1->Size = System::Drawing::Size(100, 26);
+            this->textBox_mainResEps1->TabIndex = 9;
+            // 
+            // label_mainResEps2
+            // 
+            this->label_mainResEps2->AutoSize = true;
+            this->label_mainResEps2->Location = System::Drawing::Point(19, 192);
+            this->label_mainResEps2->Name = L"label_mainResEps2";
+            this->label_mainResEps2->Size = System::Drawing::Size(85, 20);
+            this->label_mainResEps2->TabIndex = 8;
+            this->label_mainResEps2->Text = L"resEps2 = ";
+            // 
+            // label_mainResEps1
+            // 
+            this->label_mainResEps1->AutoSize = true;
+            this->label_mainResEps1->Location = System::Drawing::Point(19, 160);
+            this->label_mainResEps1->Name = L"label_mainResEps1";
+            this->label_mainResEps1->Size = System::Drawing::Size(85, 20);
+            this->label_mainResEps1->TabIndex = 7;
+            this->label_mainResEps1->Text = L"resEps1 = ";
+            // 
+            // textBox_main_stepsS2
+            // 
+            this->textBox_main_stepsS2->Location = System::Drawing::Point(106, 125);
+            this->textBox_main_stepsS2->Name = L"textBox_main_stepsS2";
+            this->textBox_main_stepsS2->Size = System::Drawing::Size(100, 26);
+            this->textBox_main_stepsS2->TabIndex = 6;
+            // 
+            // label_main_stepsS2
+            // 
+            this->label_main_stepsS2->AutoSize = true;
+            this->label_main_stepsS2->Location = System::Drawing::Point(18, 128);
+            this->label_main_stepsS2->Name = L"label_main_stepsS2";
+            this->label_main_stepsS2->Size = System::Drawing::Size(86, 20);
+            this->label_main_stepsS2->TabIndex = 5;
+            this->label_main_stepsS2->Text = L"steps s2 = ";
             // 
             // textBox_main_stepsS1
             // 
@@ -669,22 +748,6 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
             this->label_main_n->TabIndex = 0;
             this->label_main_n->Text = L"n = ";
             // 
-            // label_main_stepsS2
-            // 
-            this->label_main_stepsS2->AutoSize = true;
-            this->label_main_stepsS2->Location = System::Drawing::Point(18, 128);
-            this->label_main_stepsS2->Name = L"label_main_stepsS2";
-            this->label_main_stepsS2->Size = System::Drawing::Size(86, 20);
-            this->label_main_stepsS2->TabIndex = 5;
-            this->label_main_stepsS2->Text = L"steps s2 = ";
-            // 
-            // textBox_main_stepsS2
-            // 
-            this->textBox_main_stepsS2->Location = System::Drawing::Point(106, 125);
-            this->textBox_main_stepsS2->Name = L"textBox_main_stepsS2";
-            this->textBox_main_stepsS2->Size = System::Drawing::Size(100, 26);
-            this->textBox_main_stepsS2->TabIndex = 6;
-            // 
             // MainForm
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
@@ -718,17 +781,8 @@ private: System::Windows::Forms::Label^  label_main_stepsS1;
     private: System::Void button_testSolve_Click(System::Object^  sender, System::EventArgs^  e);
 
     protected:
-             double func_u(double x, double y);
-             double func_f1(double x, double y);
-             double func_f2(double x, double y);
              void test_Solve();
-             int main_Solve(double **vs, double **fs, int n, int m, int nmax);
-
-             // граничные условия
-             double nu1(double y);
-             double nu2(double y);
-             double nu3(double x);
-             double nu4(double x);
+             int main_Solve(double **vs, double **fs, int n, int m, int nmax, bool index);
 
              // для матрицы vs - задать нулевое начальное приближение и ГУ
              void setVS(double **vs, int n, int m);

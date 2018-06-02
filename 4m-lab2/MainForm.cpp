@@ -114,7 +114,7 @@ System::Void My4mlab2::MainForm::button_mainSolve_Click(System::Object ^ sender,
     setVS(vs1, main_n, main_m);
 
     // считаем (разбиение s1)
-    int s = main_Solve(vs1, f2, main_n, main_m, main_Nmax);
+    int s = main_Solve(vs1, f2, main_n, main_m, main_Nmax, 0);
     textBox_main_stepsS1->Text = System::Convert::ToString(s);
 
     // теперь необходимо рассчитать разбиение s2
@@ -123,12 +123,13 @@ System::Void My4mlab2::MainForm::button_mainSolve_Click(System::Object ^ sender,
     deleteMatrix<double>(f2);
     f2 = createMatrix<double>(2 * main_n + 1, 2 * main_m + 1);
 
-    h = (b - a) / (2*main_n);
-    k = (d - c) / (2*main_m);
+    // пересчитываем шаг
+    h = (b - a) / (2 * main_n);
+    k = (d - c) / (2 * main_m);
 
     // считаем значения правой части (разбиение s2)
-    for (int i = 0; i < 2*main_n + 1; i++)
-        for (int j = 0; j < 2*main_m + 1; j++)
+    for (int i = 0; i < 2 * main_n + 1; i++)
+        for (int j = 0; j < 2 * main_m + 1; j++)
         {
             f2[i][j] = func_f2(a + h * i, c + k * j);
         }
@@ -138,7 +139,7 @@ System::Void My4mlab2::MainForm::button_mainSolve_Click(System::Object ^ sender,
     setVS(vs2, 2 * main_n, 2 * main_m);
 
     // считаем (разбиение s2)
-    s = main_Solve(vs2, f2, 2 * main_n, 2 * main_m, main_Nmax);
+    s = main_Solve(vs2, f2, 2 * main_n, 2 * main_m, main_Nmax, 1);
     textBox_main_stepsS2->Text = System::Convert::ToString(s);
 
     // заполняем таблицу с разбиением s1
@@ -285,31 +286,6 @@ System::Void My4mlab2::MainForm::button_testSolve_Click(System::Object ^ sender,
     textBox_test_MaxErr->Text = System::Convert::ToString(maxErr);
 }
 
-double My4mlab2::MainForm::func_u(double x, double y)
-{
-    double pi = M_PI;
-
-    return exp(pow(sin(pi*x*y), 2.0));
-}
-
-double My4mlab2::MainForm::func_f1(double x, double y)
-{
-    double pi = M_PI;
-
-    return -2.0*pi*pi*(x*x + y*y)*exp(pow(sin(pi*x*y), 2.0))*((2.0*pow(sin(pi*x*y), 2.0) + 1.0)*pow(cos(pi*x*y), 2.0) - pow(sin(pi*x*y), 2.0));
-}
-
-double My4mlab2::MainForm::func_f2(double x, double y)
-{
-    double pi = M_PI;
-
-    //return -fabs(x - y);
-
-    return -2.0*pi*pi*(x*x + y * y)*exp(pow(sin(pi*x*y), 2.0))*((2.0*pow(sin(pi*x*y), 2.0) + 1.0)*pow(cos(pi*x*y), 2.0) - pow(sin(pi*x*y), 2.0));
-    //return -fabs(x*x - 2*y);
-    //return -(pow(sin(pi*x*y), 2));
-}
-
 // метод верхней релаксации для решения тестовой задачи
 void My4mlab2::MainForm::test_Solve()
 { 
@@ -348,11 +324,12 @@ void My4mlab2::MainForm::test_Solve()
             flag = true;
     }
 
+    textBox_testResEps->Text = System::Convert::ToString(eps_max);
     textBox_test_steps->Text = System::Convert::ToString(s);
 }
 
 // метод верхней релаксации для решения основной задачи
-int My4mlab2::MainForm::main_Solve(double **vs, double **fs, int n, int m, int nmax)
+int My4mlab2::MainForm::main_Solve(double **vs, double **fs, int n, int m, int nmax, bool index)
 {
     int s = 0;							// счетчик итераций
     double eps_max = 0;					// текущее значение прироста
@@ -389,50 +366,12 @@ int My4mlab2::MainForm::main_Solve(double **vs, double **fs, int n, int m, int n
             flag = true;
     }
 
+    if (index == 0) textBox_mainResEps1->Text = System::Convert::ToString(eps_max);
+    if (index == 1) textBox_mainResEps2->Text = System::Convert::ToString(eps_max);
     return s;
 }
 
-double My4mlab2::MainForm::nu1(double y)
-{
-    double pi = M_PI;
-    //return -y * (y - 1);
-
-    //return sin(pi*y);
-    //return pow(sin(pi*y), 2.0);
-    return 1.0;
-}
-
-double My4mlab2::MainForm::nu2(double y)
-{
-    double pi = M_PI;
-    //return y * (1 - y);
-
-    //return sin(pi*y);
-    //return pow(sin(2.0*pi*y), 2.0);
-    return exp(pow(sin(pi * 2 * y), 2.0));
-}
-
-double My4mlab2::MainForm::nu3(double x)
-{
-    double pi = M_PI;
-
-    //return x - x * x;
-    //return fabs(sin(pi*x));
-    //return pow(sin(pi*x), 2.0);
-
-    return 1.0;
-}
-
-double My4mlab2::MainForm::nu4(double x)
-{
-    double pi = M_PI;
-    //return x - x * x;
-
-    //return fabs(sin(pi*x)) * exp(x);
-    //return pow(sin(2.0*pi*x), 2.0);
-    return exp(pow(sin(pi * x), 2.0));
-}
-
+// для матрицы vs - задать нулевое начальное приближение и ГУ
 void My4mlab2::MainForm::setVS(double ** vs, int n, int m)
 {
     double h = (b - a) / n;

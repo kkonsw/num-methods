@@ -152,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainForm.cpp" />
+    <ClCompile Include="main_functions.cpp" />
+    <ClCompile Include="test_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ErrorsMain.h">
@@ -163,12 +165,14 @@
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="main_functions.h" />
     <ClInclude Include="TableMainVS2.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="TableTestU.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="test_functions.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ErrorsMain.resx">
