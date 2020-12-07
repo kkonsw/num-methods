@@ -36,7 +36,10 @@ namespace My4mlab2 {
         int test_Nmax;      // макс. число шагов
         int main_Nmax;
         double test_eps;    // макс. погрешность 
-        double main_eps;
+    private: System::Windows::Forms::Label^  label_testGrid;
+    protected:
+    private: System::Windows::Forms::Label^  label_mainGrid;
+             double main_eps;
 
         // выделение памяти под матрицы
         template <typename T>
@@ -239,6 +242,8 @@ namespace My4mlab2 {
             this->textBox_main_n = (gcnew System::Windows::Forms::TextBox());
             this->label_main_m = (gcnew System::Windows::Forms::Label());
             this->label_main_n = (gcnew System::Windows::Forms::Label());
+            this->label_testGrid = (gcnew System::Windows::Forms::Label());
+            this->label_mainGrid = (gcnew System::Windows::Forms::Label());
             this->tabControl->SuspendLayout();
             this->tabPage_test->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView_testV))->BeginInit();
@@ -317,7 +322,7 @@ namespace My4mlab2 {
             this->groupBox_testResults->Controls->Add(this->label_testMaxErr);
             this->groupBox_testResults->Location = System::Drawing::Point(48, 346);
             this->groupBox_testResults->Name = L"groupBox_testResults";
-            this->groupBox_testResults->Size = System::Drawing::Size(267, 266);
+            this->groupBox_testResults->Size = System::Drawing::Size(314, 330);
             this->groupBox_testResults->TabIndex = 1;
             this->groupBox_testResults->TabStop = false;
             this->groupBox_testResults->Text = L"Результаты";
@@ -372,6 +377,7 @@ namespace My4mlab2 {
             // 
             // groupBox_testSettings
             // 
+            this->groupBox_testSettings->Controls->Add(this->label_testGrid);
             this->groupBox_testSettings->Controls->Add(this->textBox_test_w);
             this->groupBox_testSettings->Controls->Add(this->label_test_w);
             this->groupBox_testSettings->Controls->Add(this->textBox_testEps);
@@ -385,14 +391,14 @@ namespace My4mlab2 {
             this->groupBox_testSettings->Controls->Add(this->label_test_n);
             this->groupBox_testSettings->Location = System::Drawing::Point(48, 59);
             this->groupBox_testSettings->Name = L"groupBox_testSettings";
-            this->groupBox_testSettings->Size = System::Drawing::Size(267, 281);
+            this->groupBox_testSettings->Size = System::Drawing::Size(320, 281);
             this->groupBox_testSettings->TabIndex = 0;
             this->groupBox_testSettings->TabStop = false;
             this->groupBox_testSettings->Text = L"Параметры";
             // 
             // textBox_test_w
             // 
-            this->textBox_test_w->Location = System::Drawing::Point(106, 180);
+            this->textBox_test_w->Location = System::Drawing::Point(214, 180);
             this->textBox_test_w->Name = L"textBox_test_w";
             this->textBox_test_w->Size = System::Drawing::Size(100, 26);
             this->textBox_test_w->TabIndex = 10;
@@ -401,15 +407,15 @@ namespace My4mlab2 {
             // label_test_w
             // 
             this->label_test_w->AutoSize = true;
-            this->label_test_w->Location = System::Drawing::Point(63, 183);
+            this->label_test_w->Location = System::Drawing::Point(7, 183);
             this->label_test_w->Name = L"label_test_w";
-            this->label_test_w->Size = System::Drawing::Size(37, 20);
+            this->label_test_w->Size = System::Drawing::Size(148, 20);
             this->label_test_w->TabIndex = 9;
-            this->label_test_w->Text = L"w = ";
+            this->label_test_w->Text = L"Параметр метода";
             // 
             // textBox_testEps
             // 
-            this->textBox_testEps->Location = System::Drawing::Point(106, 148);
+            this->textBox_testEps->Location = System::Drawing::Point(214, 148);
             this->textBox_testEps->Name = L"textBox_testEps";
             this->textBox_testEps->Size = System::Drawing::Size(100, 26);
             this->textBox_testEps->TabIndex = 8;
@@ -417,7 +423,7 @@ namespace My4mlab2 {
             // 
             // textBox_testNmax
             // 
-            this->textBox_testNmax->Location = System::Drawing::Point(106, 116);
+            this->textBox_testNmax->Location = System::Drawing::Point(214, 116);
             this->textBox_testNmax->Name = L"textBox_testNmax";
             this->textBox_testNmax->Size = System::Drawing::Size(100, 26);
             this->textBox_testNmax->TabIndex = 7;
@@ -426,20 +432,20 @@ namespace My4mlab2 {
             // label_testEps
             // 
             this->label_testEps->AutoSize = true;
-            this->label_testEps->Location = System::Drawing::Point(48, 151);
+            this->label_testEps->Location = System::Drawing::Point(7, 151);
             this->label_testEps->Name = L"label_testEps";
-            this->label_testEps->Size = System::Drawing::Size(52, 20);
+            this->label_testEps->Size = System::Drawing::Size(165, 20);
             this->label_testEps->TabIndex = 6;
-            this->label_testEps->Text = L"eps = ";
+            this->label_testEps->Text = L"Требуемая точность";
             // 
             // label_testNmax
             // 
             this->label_testNmax->AutoSize = true;
-            this->label_testNmax->Location = System::Drawing::Point(27, 119);
+            this->label_testNmax->Location = System::Drawing::Point(7, 119);
             this->label_testNmax->Name = L"label_testNmax";
-            this->label_testNmax->Size = System::Drawing::Size(73, 20);
+            this->label_testNmax->Size = System::Drawing::Size(151, 20);
             this->label_testNmax->TabIndex = 5;
-            this->label_testNmax->Text = L"n_max = ";
+            this->label_testNmax->Text = L"Макс. число шагов";
             // 
             // button_testSolve
             // 
@@ -454,7 +460,7 @@ namespace My4mlab2 {
             // 
             // textBox_test_m
             // 
-            this->textBox_test_m->Location = System::Drawing::Point(106, 84);
+            this->textBox_test_m->Location = System::Drawing::Point(214, 84);
             this->textBox_test_m->Name = L"textBox_test_m";
             this->textBox_test_m->Size = System::Drawing::Size(100, 26);
             this->textBox_test_m->TabIndex = 3;
@@ -462,7 +468,7 @@ namespace My4mlab2 {
             // 
             // textBox_test_n
             // 
-            this->textBox_test_n->Location = System::Drawing::Point(106, 52);
+            this->textBox_test_n->Location = System::Drawing::Point(214, 52);
             this->textBox_test_n->Name = L"textBox_test_n";
             this->textBox_test_n->Size = System::Drawing::Size(100, 26);
             this->textBox_test_n->TabIndex = 2;
@@ -471,7 +477,7 @@ namespace My4mlab2 {
             // label_test_m
             // 
             this->label_test_m->AutoSize = true;
-            this->label_test_m->Location = System::Drawing::Point(61, 87);
+            this->label_test_m->Location = System::Drawing::Point(65, 87);
             this->label_test_m->Name = L"label_test_m";
             this->label_test_m->Size = System::Drawing::Size(39, 20);
             this->label_test_m->TabIndex = 1;
@@ -482,9 +488,9 @@ namespace My4mlab2 {
             this->label_test_n->AutoSize = true;
             this->label_test_n->Location = System::Drawing::Point(65, 55);
             this->label_test_n->Name = L"label_test_n";
-            this->label_test_n->Size = System::Drawing::Size(35, 20);
+            this->label_test_n->Size = System::Drawing::Size(39, 20);
             this->label_test_n->TabIndex = 0;
-            this->label_test_n->Text = L"n = ";
+            this->label_test_n->Text = L"n  = ";
             // 
             // tabPage_main
             // 
@@ -547,7 +553,7 @@ namespace My4mlab2 {
             this->groupBox_mainResults->Controls->Add(this->label_mainMaxDiff);
             this->groupBox_mainResults->Location = System::Drawing::Point(48, 346);
             this->groupBox_mainResults->Name = L"groupBox_mainResults";
-            this->groupBox_mainResults->Size = System::Drawing::Size(264, 257);
+            this->groupBox_mainResults->Size = System::Drawing::Size(320, 330);
             this->groupBox_mainResults->TabIndex = 1;
             this->groupBox_mainResults->TabStop = false;
             this->groupBox_mainResults->Text = L"Результаты";
@@ -634,6 +640,7 @@ namespace My4mlab2 {
             // 
             // groupBox_mainSettings
             // 
+            this->groupBox_mainSettings->Controls->Add(this->label_mainGrid);
             this->groupBox_mainSettings->Controls->Add(this->textBox_main_w);
             this->groupBox_mainSettings->Controls->Add(this->textBox_mainEps);
             this->groupBox_mainSettings->Controls->Add(this->textBox_mainNmax);
@@ -647,14 +654,14 @@ namespace My4mlab2 {
             this->groupBox_mainSettings->Controls->Add(this->label_main_n);
             this->groupBox_mainSettings->Location = System::Drawing::Point(48, 59);
             this->groupBox_mainSettings->Name = L"groupBox_mainSettings";
-            this->groupBox_mainSettings->Size = System::Drawing::Size(267, 281);
+            this->groupBox_mainSettings->Size = System::Drawing::Size(320, 281);
             this->groupBox_mainSettings->TabIndex = 0;
             this->groupBox_mainSettings->TabStop = false;
             this->groupBox_mainSettings->Text = L"Параметры";
             // 
             // textBox_main_w
             // 
-            this->textBox_main_w->Location = System::Drawing::Point(106, 180);
+            this->textBox_main_w->Location = System::Drawing::Point(214, 180);
             this->textBox_main_w->Name = L"textBox_main_w";
             this->textBox_main_w->Size = System::Drawing::Size(100, 26);
             this->textBox_main_w->TabIndex = 13;
@@ -662,7 +669,7 @@ namespace My4mlab2 {
             // 
             // textBox_mainEps
             // 
-            this->textBox_mainEps->Location = System::Drawing::Point(106, 148);
+            this->textBox_mainEps->Location = System::Drawing::Point(214, 148);
             this->textBox_mainEps->Name = L"textBox_mainEps";
             this->textBox_mainEps->Size = System::Drawing::Size(100, 26);
             this->textBox_mainEps->TabIndex = 12;
@@ -670,7 +677,7 @@ namespace My4mlab2 {
             // 
             // textBox_mainNmax
             // 
-            this->textBox_mainNmax->Location = System::Drawing::Point(106, 116);
+            this->textBox_mainNmax->Location = System::Drawing::Point(214, 116);
             this->textBox_mainNmax->Name = L"textBox_mainNmax";
             this->textBox_mainNmax->Size = System::Drawing::Size(100, 26);
             this->textBox_mainNmax->TabIndex = 11;
@@ -679,29 +686,29 @@ namespace My4mlab2 {
             // label_main_w
             // 
             this->label_main_w->AutoSize = true;
-            this->label_main_w->Location = System::Drawing::Point(63, 183);
+            this->label_main_w->Location = System::Drawing::Point(7, 183);
             this->label_main_w->Name = L"label_main_w";
-            this->label_main_w->Size = System::Drawing::Size(37, 20);
+            this->label_main_w->Size = System::Drawing::Size(148, 20);
             this->label_main_w->TabIndex = 10;
-            this->label_main_w->Text = L"w = ";
+            this->label_main_w->Text = L"Параметр метода";
             // 
             // label_mainEps
             // 
             this->label_mainEps->AutoSize = true;
-            this->label_mainEps->Location = System::Drawing::Point(48, 151);
+            this->label_mainEps->Location = System::Drawing::Point(7, 151);
             this->label_mainEps->Name = L"label_mainEps";
-            this->label_mainEps->Size = System::Drawing::Size(52, 20);
+            this->label_mainEps->Size = System::Drawing::Size(165, 20);
             this->label_mainEps->TabIndex = 7;
-            this->label_mainEps->Text = L"eps = ";
+            this->label_mainEps->Text = L"Требуемая точность";
             // 
             // label_mainNmax
             // 
             this->label_mainNmax->AutoSize = true;
-            this->label_mainNmax->Location = System::Drawing::Point(27, 119);
+            this->label_mainNmax->Location = System::Drawing::Point(7, 119);
             this->label_mainNmax->Name = L"label_mainNmax";
-            this->label_mainNmax->Size = System::Drawing::Size(73, 20);
+            this->label_mainNmax->Size = System::Drawing::Size(151, 20);
             this->label_mainNmax->TabIndex = 6;
-            this->label_mainNmax->Text = L"n_max = ";
+            this->label_mainNmax->Text = L"Макс. число шагов";
             // 
             // button_mainSolve
             // 
@@ -716,7 +723,7 @@ namespace My4mlab2 {
             // 
             // textBox_main_m
             // 
-            this->textBox_main_m->Location = System::Drawing::Point(106, 84);
+            this->textBox_main_m->Location = System::Drawing::Point(214, 84);
             this->textBox_main_m->Name = L"textBox_main_m";
             this->textBox_main_m->Size = System::Drawing::Size(100, 26);
             this->textBox_main_m->TabIndex = 3;
@@ -724,7 +731,7 @@ namespace My4mlab2 {
             // 
             // textBox_main_n
             // 
-            this->textBox_main_n->Location = System::Drawing::Point(106, 52);
+            this->textBox_main_n->Location = System::Drawing::Point(214, 52);
             this->textBox_main_n->Name = L"textBox_main_n";
             this->textBox_main_n->Size = System::Drawing::Size(100, 26);
             this->textBox_main_n->TabIndex = 2;
@@ -733,7 +740,7 @@ namespace My4mlab2 {
             // label_main_m
             // 
             this->label_main_m->AutoSize = true;
-            this->label_main_m->Location = System::Drawing::Point(61, 87);
+            this->label_main_m->Location = System::Drawing::Point(65, 87);
             this->label_main_m->Name = L"label_main_m";
             this->label_main_m->Size = System::Drawing::Size(39, 20);
             this->label_main_m->TabIndex = 1;
@@ -744,9 +751,27 @@ namespace My4mlab2 {
             this->label_main_n->AutoSize = true;
             this->label_main_n->Location = System::Drawing::Point(65, 55);
             this->label_main_n->Name = L"label_main_n";
-            this->label_main_n->Size = System::Drawing::Size(35, 20);
+            this->label_main_n->Size = System::Drawing::Size(39, 20);
             this->label_main_n->TabIndex = 0;
-            this->label_main_n->Text = L"n = ";
+            this->label_main_n->Text = L"n  = ";
+            // 
+            // label_testGrid
+            // 
+            this->label_testGrid->AutoSize = true;
+            this->label_testGrid->Location = System::Drawing::Point(7, 26);
+            this->label_testGrid->Name = L"label_testGrid";
+            this->label_testGrid->Size = System::Drawing::Size(160, 20);
+            this->label_testGrid->TabIndex = 11;
+            this->label_testGrid->Text = L"Размерность сетки:";
+            // 
+            // label_mainGrid
+            // 
+            this->label_mainGrid->AutoSize = true;
+            this->label_mainGrid->Location = System::Drawing::Point(7, 26);
+            this->label_mainGrid->Name = L"label_mainGrid";
+            this->label_mainGrid->Size = System::Drawing::Size(160, 20);
+            this->label_mainGrid->TabIndex = 14;
+            this->label_mainGrid->Text = L"Размерность сетки:";
             // 
             // MainForm
             // 
